@@ -168,7 +168,7 @@ class Tree{
         Bnode<T> *rightchild=findParent(Root->right,Child,val);
         if(rightchild) return rightchild;
     }
-    void Delete(Bnode<T> *p,T val){
+        void Delete(Bnode<T> *p,T val){
         if(!p) return; 
         Bnode<T> *Parent=findParent(root,root,val);;
         Bnode<T> *current=p;
@@ -176,50 +176,61 @@ class Tree{
         if(current==NULL) return;
         // TH1: neu la nut la
         if(current->left==NULL&&current->right==NULL){
-            if(current==root) root=NULL;
-            else if(!Parent->left){
+            cout<<"hi";
+            if(current==root){
+                root=NULL;
+            }
+            else if(Parent->left){
                 Parent->right=NULL;
             }
-            else if(!Parent->right){
+            else if(Parent->right){
                 Parent->left=NULL;
             }
+            delete current;
         }
         // TH2: neu nut chi co 1 con
-        if(current->left==NULL){
-            if(current==root) root=current->right;
-            else if(Parent->left){
-                Parent->left=current->right;
-            }
-            else if(Parent->right){
-                Parent->right=current->right;
-            }
-        }
-        if(current->right==NULL){
+        if(current->left!=NULL&&current->right==NULL){
             if(current==root) root=current->left;
             else if(Parent->left){
-                Parent->left=Parent->left;
+                Parent->left=current->left;
             }
             else if(Parent->right){
-                Parent->right=Parent->left;
+                Parent->right=current->left;
             }
+            delete current;
+        }
+        if(current->right!=NULL&&current->left==NULL){
+            if(current==root) root=current->right;
+            else if(Parent->left){
+                Parent->left=Parent->right;
+            }
+            else if(Parent->right){
+                Parent->right=Parent->right;
+            }
+            delete current;
         }
         // TH3: nut xoa co 2 con, se tim nut xa nhat cung phia cua nut xoa. 
         // chang han: neu nut xoa nam ben trai thi tim nut con trai xa nhat va nguoc lai
         if(current->left!=NULL&&current->right!=NULL){ 
             if(current->left){
                 Bnode<T> *tmp=current->left;
+                Bnode<T> *tam=current->left;
                 while(tmp->left!=NULL){
-    
+                    tam=tmp;
                     tmp=tmp->left;
                 }
                 current->data=tmp->data;
-                current=tmp;
                 delete tmp;
-                tmp=NULL;
+                if(tmp!=tam){
+                    tam->left=NULL;
+                }
+                else{
+                    current->left=NULL;
+                }    
+                
+               
             }
         }
-        
-
     }
     void Delete(T val){
         Delete(root,val);
